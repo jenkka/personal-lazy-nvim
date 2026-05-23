@@ -4,7 +4,7 @@ return {
     opts = {},
     config = function()
         require('which-key').setup({
-            delay = 1000,
+            delay = 500,
         })
     end,
 }

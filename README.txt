@@ -5,7 +5,7 @@
 
 LEGEND:  <leader> = Space    <localleader> = \    C- = Ctrl+
 
-Press <leader> and wait (1s) -- which-key will show all available keybinds.
+Press <leader> and wait (0.5s) -- which-key will show all available keybinds.
 
 
 ================================================================================
@@ -28,15 +28,19 @@ To remove one: delete its file (or move to graveyard/). Run :Lazy clean after.
 Plugin                    Purpose
 -----------               ---------------------------------------------------
 fzf-lua                   Fuzzy finder (files, grep, buffers)
+harpoon                   Pinned-file quick-switching (Prime's plugin)
 oil.nvim                  File explorer as an editable buffer
 blink.cmp                 Autocompletion (LSP, snippets, paths, buffer words)
 nvim-lspconfig            LSP client configuration
 mason.nvim                Auto-install LSP servers and tools
-mason-lspconfig            Bridge between Mason and lspconfig
+mason-lspconfig           Bridge between Mason and lspconfig
+mason-tool-installer      Auto-install formatters/linters via Mason
 conform.nvim              Auto-formatting and format-on-save
 nvim-treesitter           Syntax highlighting, folding, indentation
+nvim-surround             Add/change/delete surrounding chars (cs/ds/ys)
+mini.pairs                Auto-close brackets and quotes
 trouble.nvim              Diagnostics list panel
-tiny-inline-diagnostic     Inline diagnostic display (replaces virtual text)
+tiny-inline-diagnostic    Inline diagnostic display (replaces virtual text)
 undotree                  Visual undo history browser
 which-key.nvim            Shows available keybinds after pressing a prefix
 lualine.nvim              Statusline
@@ -46,7 +50,8 @@ nvim-dap                  Debug Adapter Protocol client
 nvim-dap-ui               UI panel for nvim-dap (scopes, stacks, watches)
 nvim-dap-go               Go integration for nvim-dap (wraps delve)
 nvim-nio                  Async I/O library (nvim-dap-ui dependency)
-codecompanion.nvim        AI chat assistant (Ollama / qwen2.5-coder:14b)
+99                        AI selection-replace agent (uses Claude sub)
+claudecode.nvim           Claude Code IDE integration (uses Claude sub)
 moonfly                   Colorscheme (catppuccin available but commented out)
 mini.icons                Icon provider
 friendly-snippets         Community snippet collection
@@ -61,6 +66,25 @@ cellular-automaton        Make it rain! (just for fun, in graveyard)
 <leader>fg    Live grep across all files
               Tip: add  -- -g '*.go'  to filter by filetype
 <leader>fb    Switch between open buffers
+
+
+================================================================================
+  FILE QUICK-SWITCHING (harpoon)
+================================================================================
+
+Pin a few files you're actively working on, then jump between them instantly
+without going through fzf or :bnext. Way faster when you're bouncing between
+2-4 related files.
+
+<leader>H     Add current file to harpoon list
+<C-e>         Toggle the harpoon quick menu (reorder/delete entries inside)
+<leader>1     Jump to slot 1
+<leader>2     Jump to slot 2
+<leader>3     Jump to slot 3
+<leader>4     Jump to slot 4
+
+The list persists per-project (stored in ~/.local/share/nvim/harpoon/).
+Inside the quick menu: edit entries like a normal buffer; :w to save.
 
 
 ================================================================================
@@ -156,6 +180,26 @@ CLIPBOARD (system)
   <leader>y       Yank selection to system clipboard
   <leader>Y       Yank whole line to system clipboard
   <leader>cp      Toggle copy mode (hides line numbers, signs, etc.)
+
+
+================================================================================
+  TEXT MANIPULATION (nvim-surround, mini.pairs)
+================================================================================
+
+SURROUNDINGS (nvim-surround)
+  ys{motion}{char}    Surround motion with {char}      e.g. ysiw"  -> "word"
+  yss{char}           Surround entire line             e.g. yss)   -> (line)
+  ds{char}            Delete surrounding {char}        e.g. ds"
+  cs{old}{new}        Change surrounding {old}->{new}  e.g. cs"'   -> 'word'
+  S{char}             (visual mode) Wrap selection in {char}
+
+  Common chars: " ' ` ) ] } > t (HTML tag).
+  Brackets with space inside: use ( [ { (open). Without space: use ) ] }.
+
+AUTO-PAIRS (mini.pairs)
+  Auto-closes brackets and quotes as you type:  ( -> ()  " -> ""  etc.
+  Smart: won't double-close if the next char is already the closing one.
+  Press <BS> on an empty pair to delete both halves.
 
 
 ================================================================================
@@ -280,14 +324,37 @@ Typical Go workflow:
 
 
 ================================================================================
-  AI ASSISTANT (CodeCompanion + Ollama)
+  AI ASSISTANT (99 + claudecode.nvim)
 ================================================================================
 
-<leader>aa    Toggle AI chat window
-<leader>ac    Open AI actions menu (explain, refactor, etc.)
-<leader>ad    Add visual selection to chat as context (visual mode)
+Two complementary AI tools. Both use the `claude` CLI under your existing
+Claude subscription -- no extra billing, but they share the same usage limits.
 
-Currently using: qwen2.5-coder:14b via Ollama (runs locally).
+99 (ThePrimeagen/99) -- selection-based edits, pop-up, runs in background
+  <leader>9v    (visual) Edit selection -- prompts for instruction
+  <leader>9s    Project-wide AI search (results in quickfix)
+  <leader>9x    Cancel in-flight 99 requests
+  <leader>9o    View the last result
+
+  Workflow: visual-select code, <leader>9v, type "add error handling",
+  hit enter. 99 replaces the selection with the edited version.
+  Don't like it? Press u to undo.
+
+claudecode.nvim (coder/claudecode.nvim) -- full Claude Code agent in nvim
+  <leader>ac    Toggle the Claude Code terminal window
+  <leader>af    Focus the Claude window
+  <leader>ar    Resume the previous Claude session
+  <leader>aC    Continue the last session
+  <leader>am    Pick a different Claude model
+  <leader>ab    Send current buffer as context to Claude
+  <leader>as    (visual) Send selection to Claude
+  <leader>as    (in oil)  Add file from explorer
+  <leader>aa    Accept the proposed diff
+  <leader>ad    Reject the proposed diff
+
+When to use which:
+  99           Small surgical edits ("add error handling here")
+  claudecode   Larger asks where the agent needs to read other files
 
 
 ================================================================================
@@ -343,7 +410,7 @@ MISC
 - Search is case-insensitive unless you use uppercase (smartcase)
 - Scroll keeps 8 lines of padding above/below cursor
 - Color column at column 81
-- Spell checking is on (en_us)
+- Spell checking is on (en_us) in markdown/text/gitcommit only
 - Whitespace chars are visible: tabs show as >., trailing spaces as blocks
 
 

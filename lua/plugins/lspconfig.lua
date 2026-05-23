@@ -21,6 +21,21 @@ return {
         end
     },
     {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        dependencies = { "williamboman/mason.nvim" },
+        config = function()
+            require("mason-tool-installer").setup({
+                ensure_installed = {
+                    "stylua",
+                    "shfmt",
+                    "prettier",
+                    "ruff",
+                    "goimports",
+                },
+            })
+        end,
+    },
+    {
         "neovim/nvim-lspconfig",
         config = function()
             vim.lsp.enable({
@@ -29,7 +44,6 @@ return {
                 "bashls",
                 "gopls",
                 "ts_ls",
-                --"rust_analyzer",
             })
 
             vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = "LSP hover" })

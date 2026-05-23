@@ -9,10 +9,10 @@ vim.opt.mouse = "" -- Turn off mouse
 vim.opt.number = true
 vim.opt.relativenumber = true
 
--- vim.opt.expandtab = true
--- vim.opt.tabstop = 4
--- vim.opt.softtabstop = 4
--- vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
 
 vim.opt.smartindent = true -- Neovim's equivalent for better indenting
 
@@ -53,7 +53,23 @@ vim.opt.history = 1000
 vim.opt.cursorline = true
 
 vim.opt.spelllang = 'en_us'
-vim.opt.spell = true
+
+-- Enable spell-check only in text-y filetypes (off in code).
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "markdown", "text", "gitcommit" },
+	callback = function() vim.opt_local.spell = true end,
+})
+
+-- JS/TS family: 2-space indent (replaces per-language ftplugin files).
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+	callback = function()
+		vim.bo.expandtab = true
+		vim.bo.tabstop = 2
+		vim.bo.softtabstop = 2
+		vim.bo.shiftwidth = 2
+	end,
+})
 
 -- Treesitter folding
 -- Commands:
@@ -108,11 +124,6 @@ vim.keymap.set("n", "Q", "<nop>", { desc = "Disable Q" })
 
 vim.keymap.set('n', '<leader>cp', ':lua ToggleCopyGarbage()<CR>',
 	{ noremap = true, silent = true, desc = "Toggle copy mode" })
-
--- CodeCompanion AI Shortcuts
-vim.keymap.set({ "n", "v" }, "<leader>aa", "<cmd>CodeCompanionChat Toggle<cr>", { desc = "Toggle AI Chat" })
-vim.keymap.set({ "n", "v" }, "<leader>ac", "<cmd>CodeCompanionActions<cr>", { desc = "Open AI Actions" })
-vim.keymap.set("v", "<leader>ad", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add selected to AI Chat" })
 
 -- Show diagnostics
 vim.keymap.set("n",
