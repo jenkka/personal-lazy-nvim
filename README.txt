@@ -52,7 +52,7 @@ nvim-dap-go               Go integration for nvim-dap (wraps delve)
 nvim-nio                  Async I/O library (nvim-dap-ui dependency)
 99                        AI selection-replace agent (uses Claude sub)
 claudecode.nvim           Claude Code IDE integration (uses Claude sub)
-moonfly                   Colorscheme (catppuccin available but commented out)
+rose-pine                 Colorscheme
 mini.icons                Icon provider
 friendly-snippets         Community snippet collection
 cellular-automaton        Make it rain! (just for fun, in graveyard)

@@ -28,11 +28,21 @@ vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
 
--- Make background transparent (inherits terminal opacity)
+-- Make background transparent (inherits terminal opacity / bg image)
 vim.api.nvim_create_autocmd("ColorScheme", {
 	callback = function()
-		vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
-		vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
+		local groups = {
+			"Normal",       -- main buffer (current window)
+			"NormalNC",     -- main buffer (inactive windows -- fixes split transparency)
+			"NormalFloat",  -- floating windows
+			"EndOfBuffer",  -- '~' lines past end of file
+			"SignColumn",   -- gutter where diagnostic/git signs live
+			"LineNr",       -- line numbers
+			"NonText",      -- listchars markers (>·, █, ␣) and similar
+		}
+		for _, g in ipairs(groups) do
+			vim.api.nvim_set_hl(0, g, { bg = "NONE" })
+		end
 	end,
 })
 
