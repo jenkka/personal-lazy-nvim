@@ -32,20 +32,20 @@ vim.opt.termguicolors = true
 vim.api.nvim_create_autocmd("ColorScheme", {
 	callback = function()
 		local groups = {
-			"Normal",       -- main buffer (current window)
-			"NormalNC",     -- main buffer (inactive windows -- fixes split transparency)
-			"NormalFloat",  -- floating windows
-			"EndOfBuffer",  -- '~' lines past end of file
-			"SignColumn",   -- gutter where diagnostic/git signs live
-			"LineNr",       -- line numbers
-			"NonText",      -- listchars markers (>·, █, ␣) and similar
+			"Normal", -- main buffer (current window)
+			"NormalNC", -- main buffer (inactive windows -- fixes split transparency)
+			"NormalFloat", -- floating windows
+			"EndOfBuffer", -- '~' lines past end of file
+			"SignColumn", -- gutter where diagnostic/git signs live
+			"LineNr", -- line numbers
+			"NonText", -- listchars markers (>·, █, ␣) and similar
 		}
 		for _, g in ipairs(groups) do
 			vim.api.nvim_set_hl(0, g, { bg = "NONE" })
 		end
 		-- Dim listchars (tab >·, trail █, nbsp ␣) so they don't dominate
 		vim.api.nvim_set_hl(0, "Whitespace", { fg = "#3a3a44", bg = "NONE" })
-		vim.api.nvim_set_hl(0, "NonText",    { fg = "#3a3a44", bg = "NONE" })
+		vim.api.nvim_set_hl(0, "NonText", { fg = "#3a3a44", bg = "NONE" })
 	end,
 })
 
@@ -65,12 +65,14 @@ vim.opt.showmatch = true
 vim.opt.history = 1000
 vim.opt.cursorline = true
 
-vim.opt.spelllang = 'en_us'
+vim.opt.spelllang = "en_us"
 
 -- Enable spell-check only in text-y filetypes (off in code).
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = { "markdown", "text", "gitcommit" },
-	callback = function() vim.opt_local.spell = true end,
+	callback = function()
+		vim.opt_local.spell = true
+	end,
 })
 
 -- JS/TS family: 2-space indent (replaces per-language ftplugin files).
@@ -84,13 +86,8 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- Treesitter folding
--- Commands:
--- zR: open all folds
--- zM: close all open folds
--- za: toggles the fold at the cursor
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 99
 
 vim.opt.list = true
@@ -123,7 +120,7 @@ vim.keymap.set("n", "n", "nzzzv", { desc = "Next match (centered)" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Prev match (centered)" })
 
 -- Paste without overriding current buffer
-vim.keymap.set("x", "<leader>p", "\"_dP", { desc = "Paste without overwriting register" })
+vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without overwriting register" })
 
 -- Copy to clipboard
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to clipboard" })
@@ -135,15 +132,15 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete to void regi
 -- Turn off this garbage
 vim.keymap.set("n", "Q", "<nop>", { desc = "Disable Q" })
 
-vim.keymap.set('n', '<leader>cp', ':lua ToggleCopyGarbage()<CR>',
-	{ noremap = true, silent = true, desc = "Toggle copy mode" })
+vim.keymap.set(
+	"n",
+	"<leader>cp",
+	":lua ToggleCopyGarbage()<CR>",
+	{ noremap = true, silent = true, desc = "Toggle copy mode" }
+)
 
 -- Show diagnostics
-vim.keymap.set("n",
-	"<leader>e",
-	vim.diagnostic.open_float,
-	{ desc = "Show LSP diagnostic" })
-
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show LSP diagnostic" })
 
 -- Toggle garbage when copying text
 local copyGarbage = true
