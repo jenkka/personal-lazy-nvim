@@ -30,6 +30,7 @@ Plugin                    Purpose
 fzf-lua                   Fuzzy finder (files, grep, buffers)
 harpoon                   Pinned-file quick-switching (Prime's plugin)
 oil.nvim                  File explorer as an editable buffer
+oil-git-status.nvim       Adds git status columns inside Oil buffers
 blink.cmp                 Autocompletion (LSP, snippets, paths, buffer words)
 nvim-lspconfig            LSP client configuration
 mason.nvim                Auto-install LSP servers and tools
@@ -66,6 +67,8 @@ cellular-automaton        Make it rain! (just for fun, in graveyard)
 <leader>fg    Live grep across all files
               Tip: add  -- -g '*.go'  to filter by filetype
 <leader>fb    Switch between open buffers
+<leader>fs    Git status -- list files changed in the working tree
+<leader>fd    Workspace diagnostics -- all LSP errors/warnings across the project
 
 
 ================================================================================

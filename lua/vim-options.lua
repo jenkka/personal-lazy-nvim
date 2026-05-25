@@ -43,6 +43,9 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 		for _, g in ipairs(groups) do
 			vim.api.nvim_set_hl(0, g, { bg = "NONE" })
 		end
+		-- Dim listchars (tab >·, trail █, nbsp ␣) so they don't dominate
+		vim.api.nvim_set_hl(0, "Whitespace", { fg = "#3a3a44", bg = "NONE" })
+		vim.api.nvim_set_hl(0, "NonText",    { fg = "#3a3a44", bg = "NONE" })
 	end,
 })
 
